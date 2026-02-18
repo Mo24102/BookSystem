@@ -30,7 +30,7 @@ namespace Booking_System.Controllers
             var id = await _expenseService.AddExpenseAsync(dto, userId);
             
 
-            return Ok(new { message = "Expense added successfully", expenseId = id });
+            return Ok(new { expenseId = id });
         }
 
         [HttpGet]

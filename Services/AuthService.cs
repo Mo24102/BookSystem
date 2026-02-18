@@ -43,7 +43,10 @@ namespace Booking_System.Services
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Email == dto.Email);
 
-            if (user == null || user.PasswordHash != HashPassword(dto.Password))
+            if (user == null)
+                throw new Exception("Invalid email or password");
+
+            if (!VerifyPassword(dto.Password, user.PasswordHash))
                 throw new Exception("Invalid email or password");
 
             return _jwtHelper.GenerateToken(user);
@@ -51,9 +54,12 @@ namespace Booking_System.Services
 
         private string HashPassword(string password)
         {
-            using var sha = SHA256.Create();
-            var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes(password));
-            return Convert.ToBase64String(bytes);
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
+
+        private bool VerifyPassword(string password, string hashedPassword)
+        {
+            return BCrypt.Net.BCrypt.Verify(password, hashedPassword);
         }
     }
 }

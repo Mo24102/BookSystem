@@ -11,10 +11,11 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("058f7b81-fd40-4a96-958a-f4e4275daa93")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("Booking System")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d9aab36673d0cf9978eeb28ac43290dcc612b6e2")]
 [assembly: System.Reflection.AssemblyProductAttribute("Booking System")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Booking System")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

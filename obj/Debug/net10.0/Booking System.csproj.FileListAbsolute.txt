@@ -986,6 +986,10 @@ C:\Users\HP\Desktop\Asran\Booking System\Booking System\bin\Debug\net10.0\Bookin
 C:\Users\HP\Desktop\Asran\Booking System\Booking System\bin\Debug\net10.0\Booking System.pdb
 C:\Users\HP\Desktop\Asran\Booking System\Booking System\bin\Debug\net10.0\Azure.Core.dll
 C:\Users\HP\Desktop\Asran\Booking System\Booking System\bin\Debug\net10.0\Azure.Identity.dll
+C:\Users\HP\Desktop\Asran\Booking System\Booking System\bin\Debug\net10.0\BCrypt.Net-Next.dll
+C:\Users\HP\Desktop\Asran\Booking System\Booking System\bin\Debug\net10.0\FluentValidation.dll
+C:\Users\HP\Desktop\Asran\Booking System\Booking System\bin\Debug\net10.0\FluentValidation.AspNetCore.dll
+C:\Users\HP\Desktop\Asran\Booking System\Booking System\bin\Debug\net10.0\FluentValidation.DependencyInjectionExtensions.dll
 C:\Users\HP\Desktop\Asran\Booking System\Booking System\bin\Debug\net10.0\Humanizer.dll
 C:\Users\HP\Desktop\Asran\Booking System\Booking System\bin\Debug\net10.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\HP\Desktop\Asran\Booking System\Booking System\bin\Debug\net10.0\Microsoft.AspNetCore.OpenApi.dll
@@ -1123,6 +1127,7 @@ C:\Users\HP\Desktop\Asran\Booking System\Booking System\obj\Debug\net10.0\Bookin
 C:\Users\HP\Desktop\Asran\Booking System\Booking System\obj\Debug\net10.0\Booking System.csproj.CoreCompileInputs.cache
 C:\Users\HP\Desktop\Asran\Booking System\Booking System\obj\Debug\net10.0\Booking System.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\HP\Desktop\Asran\Booking System\Booking System\obj\Debug\net10.0\Booking System.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\HP\Desktop\Asran\Booking System\Booking System\obj\Debug\net10.0\Booking System.sourcelink.json
 C:\Users\HP\Desktop\Asran\Booking System\Booking System\obj\Debug\net10.0\rjimswa.dswa.cache.json
 C:\Users\HP\Desktop\Asran\Booking System\Booking System\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
 C:\Users\HP\Desktop\Asran\Booking System\Booking System\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json

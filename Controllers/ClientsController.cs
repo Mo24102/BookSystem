@@ -35,15 +35,8 @@ namespace Booking_System.Controllers
 
             int userId = int.Parse(userIdClaim);
 
-            try
-            {
                 int clientId = await _clientService.AddClientAsync(dto, userId);
-                return Ok(new { message = "Client added successfully", clientId });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+                return Ok( clientId );
         }
 
         // 📄 Get Clients (Admin sees all / User sees his own)
@@ -63,8 +56,6 @@ namespace Booking_System.Controllers
             int userId = int.Parse(userIdClaim);
             bool isAdmin = User.IsInRole("Admin");
 
-            try
-            {
                 var result = await _clientService.GetClientsAsync(
                     userId: userId,
                     isAdmin: isAdmin,
@@ -75,11 +66,6 @@ namespace Booking_System.Controllers
                 );
 
                 return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
         }
 
         // ── جديد: تعديل عميل (مثل إضافة دفعة جديدة) ──
@@ -87,15 +73,10 @@ namespace Booking_System.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(int id, [FromBody] ClientResponseItemDto dto)
         {
-            try
-            {
+
                 await _clientService.UpdateClientAsync(id, dto);
                 return Ok(new { message = "Client updated successfully" });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+
         }
 
         // ❌ Delete Client (Admin only)
@@ -103,8 +84,6 @@ namespace Booking_System.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
                 bool deleted = await _clientService.DeleteClientAsync(id);
                 if (!deleted)
                 {
@@ -112,11 +91,7 @@ namespace Booking_System.Controllers
                 }
 
                 return Ok(new { message = "Client deleted successfully" });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+
         }
     }
 }

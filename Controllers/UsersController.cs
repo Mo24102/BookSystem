@@ -34,32 +34,21 @@ namespace Booking_System.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] User dto)
         {
-            try
-            {
+
                 await _userService.UpdateUserAsync(id, dto);
                 return Ok(new { message = "User updated successfully" });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
+            
         }
 
         // ── جديد: حذف مستخدم ──
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
-            {
+
                 bool deleted = await _userService.DeleteUserAsync(id);
                 if (!deleted)
                     return NotFound(new { message = "User not found" });
                 return Ok(new { message = "User deleted successfully" });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { error = ex.Message });
-            }
         }
     }
 }
