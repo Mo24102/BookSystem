@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>إدارة المصروفات</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background: #fdfdfd; }
+        .expense-card { border-left: 5px solid #dc3545; background: white; transition: 0.3s; }
+        .expense-card:hover { transform: translateY(-3px); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-wallet text-danger me-2"></i> إدارة المصروفات</h2>
+            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#expenseModal">
+                <i class="fas fa-plus-circle"></i> إضافة مصروف
+            </button>
+        </div>
+
+        <div class="card shadow-sm border-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>الفئة</th>
+                            <th>المبلغ</th>
+                            <th>التاريخ</th>
+                            <th>إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expensesTableBody">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="expenseModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="expenseForm">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">تسجيل مصروف جديد</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">فئة المصروف</label>
+                            <input type="text" id="eCat" class="form-control" placeholder="مثال: كهرباء، إيجار..." required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">المبلغ</label>
+                            <input type="number" id="eAmount" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">التاريخ والوقت</label>
+                            <input type="datetime-local" id="eDate" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">ملاحظات</label>
+                            <textarea id="eNotes" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger w-100">حفظ المصروف</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/JS/expenses.js"></script>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>نظام الحجز | إدارة العملاء والمالية</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background: #f4f7f6; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .card-table { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        
+        /* إعدادات السكرول (التمرير) */
+        .table-container {
+            max-height: 500px; /* طول الجدول قبل ظهور السكرول */
+            overflow-y: auto;  /* سكرول طولي */
+            overflow-x: auto;  /* سكرول عرضي للأعمدة الكثيرة */
+            border: 1px solid #eee;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        /* تثبيت رأس الجدول */
+        .table thead th {
+            position: sticky !important;
+            top: 0;
+            background-color: #212529 !important;
+            color: white;
+            z-index: 100;
+            white-space: nowrap;
+        }
+
+        .table td { white-space: nowrap; vertical-align: middle; }
+
+        /* تجميل شكل السكرول بار */
+        .table-container::-webkit-scrollbar { width: 8px; height: 8px; }
+        .table-container::-webkit-scrollbar-track { background: #f1f1f1; }
+        .table-container::-webkit-scrollbar-thumb { background: #0d6efd; border-radius: 10px; }
+        .table-container::-webkit-scrollbar-thumb:hover { background: #084298; }
+
+        .search-box { max-width: 400px; border-radius: 20px; }
+        .profit-pos { color: #198754; font-weight: bold; }
+        .profit-neg { color: #dc3545; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="container-fluid px-4">
+        <div class="d-flex justify-content-between mb-4 align-items-center">
+            <h3 class="fw-bold text-dark"><i class="fas fa-wallet text-primary me-2"></i> إدارة حسابات العملاء</h3>
+            <button class="btn btn-primary px-4 fw-bold" onclick="window.resetForm()" data-bs-toggle="modal" data-bs-target="#clientModal">
+                <i class="fas fa-plus-circle me-1"></i> إضافة عميل جديد
+            </button>
+        </div>
+
+        <div class="card-table">
+            <div class="mb-3">
+                <div class="input-group search-box shadow-sm">
+                    <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+                    <input type="text" id="searchInput" class="form-control border-start-0" placeholder="بحث شامل بكل البيانات..." onkeyup="filterClients()">
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>اسم العميل</th>
+                            <th>الهاتف</th>
+                            <th>الرقم القومي</th>
+                            <th>نوع الخدمة</th>
+                            <th>التكلفة</th>
+                            <th>المطلوب</th>
+                            <th>المدفوع</th>
+                            <th>المتبقي</th>
+                            <th>الربح</th>
+                            <th>الحالة</th>
+                            <th>الأقساط</th>
+                            <th>المسؤول</th>
+                            <th>تاريخ آخر دفع</th>
+                            <th>الملاحظات</th>
+                            <th class="text-center">إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clientsTable">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="clientModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content shadow-lg border-0">
+                <form id="clientForm">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title fw-bold"><i class="fas fa-edit me-2"></i> تفاصيل الحجز والبيانات المالية</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body row g-3">
+                        <input type="hidden" id="editClientId">
+                        
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">اسم العميل</label>
+                            <input type="text" id="cName" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">رقم الهاتف</label>
+                            <input type="text" id="cPhone" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">الالرقم القومي (14 رقم)</label>
+                            <input type="text" id="cNationalId" class="form-control" maxlength="14" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">نوع الخدمة</label>
+                            <input type="text" id="cService" class="form-control" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">التكلفة (Actual)</label>
+                            <input type="number" id="cCost" class="form-control" value="0" step="0.01">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">المطلوب (Due)</label>
+                            <input type="number" id="cTotal" class="form-control" value="0" step="0.01">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">المدفوع</label>
+                            <input type="number" id="cPaid" class="form-control" value="0" step="0.01">
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">عدد الأقساط</label>
+                            <input type="number" id="cNumInstall" class="form-control" value="0">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">الأقساط المدفوعة</label>
+                            <input type="number" id="cPaidInstall" class="form-control" value="0">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">حالة الدفع</label>
+                            <select id="cStatus" class="form-select">
+                                <option value="دفع جزئي">دفع جزئي</option>
+                                <option value="مدفوع">مدفوع</option>
+                                <option value="غير مدفوع">غير مدفوع</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-label fw-bold">ملاحظات</label>
+                            <textarea id="cNotes" class="form-control" rows="2" placeholder="أضف ملاحظات إضافية هنا..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light">
+                        <button type="submit" class="btn btn-success px-5 fw-bold">حفظ البيانات</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../../JS/client.js"></script> 
+</body>
+</html>
