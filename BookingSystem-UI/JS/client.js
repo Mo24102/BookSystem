@@ -6,12 +6,17 @@ document.addEventListener('DOMContentLoaded', () => {
     if (cForm) cForm.onsubmit = saveClient;
 });
 
+<<<<<<< HEAD
+=======
+// دالة جلب البيانات من السيرفر
+>>>>>>> df3c73617a03f5b0497150d154bacba039e0876d
 async function loadClients() {
     const tableBody = document.getElementById('clientsTable');
     if (!tableBody) return;
 
     try {
         const token = localStorage.getItem('token');
+<<<<<<< HEAD
         // أضفنا Timestamp لمنع الكاش (Cache)
         const res = await fetch(`${API_URL}/api/clients?t=${new Date().getTime()}`, { 
             headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' } 
@@ -74,10 +79,54 @@ tableBody.innerHTML = clientsArray.map(client => {
         
     } catch (err) { 
         console.error(err);
+=======
+        const res = await fetch(`${API_URL}/api/clients`, { 
+            headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/json' } 
+        });
+        
+        const data = await res.json();
+        const clientsArray = Array.isArray(data) ? data : (data.items || data.data || []); 
+
+        tableBody.innerHTML = clientsArray.map(client => {
+            // التعامل مع القيم المالية والربح
+            const profit = client.profit || 0;
+            const lastDate = client.lastPaymentDate ? new Date(client.lastPaymentDate).toLocaleDateString('ar-EG') : '---';
+            
+            return `
+            <tr>
+                <td class="fw-bold">${client.clientName}</td>
+                <td>${client.phone}</td>
+                <td class="small text-muted">${client.nationalId}</td>
+                <td><span class="badge bg-light text-primary border">${client.serviceType}</span></td>
+                <td>${(client.actualCost || 0).toLocaleString()}</td>
+                <td>${(client.totalDue || 0).toLocaleString()}</td>
+                <td class="text-primary">${(client.paidAmount || 0).toLocaleString()}</td>
+                <td class="text-danger fw-bold">${(client.remainingAmount || 0).toLocaleString()}</td>
+                <td class="${profit >= 0 ? 'profit-pos' : 'profit-neg'}">${profit.toLocaleString()}</td>
+                <td>
+                    <span class="badge ${client.paymentStatus === 'مدفوع' ? 'bg-success' : 'bg-warning text-dark'}">
+                        ${client.paymentStatus}
+                    </span>
+                </td>
+                <td>${client.paidInstallments} / ${client.numberOfInstallments}</td>
+                <td class="small">${client.createdBy || '---'}</td>
+                <td class="small">${lastDate}</td>
+                <td class="small text-muted text-truncate" style="max-width: 150px" title="${client.notes}">${client.notes || '---'}</td>
+                <td class="text-center">
+                    <button class="btn btn-sm btn-outline-info" onclick='fillEditForm(${JSON.stringify(client)})'>
+                        <i class="fas fa-edit"></i>
+                    </button>
+                </td>
+            </tr>`;
+        }).join('');
+
+    } catch (err) { 
+>>>>>>> df3c73617a03f5b0497150d154bacba039e0876d
         tableBody.innerHTML = '<tr><td colspan="15" class="text-center text-danger">تعذر الاتصال بالسيرفر</td></tr>';
     }
 }
 
+<<<<<<< HEAD
 window.openPaymentModal = (client) => {
     document.getElementById('payClientId').value = client.id || client.Id;
     document.getElementById('newPayAmount').value = '';
@@ -158,6 +207,9 @@ async function deleteClient(id) {
     }
 }
 
+=======
+// دالة البحث الشامل الذكي
+>>>>>>> df3c73617a03f5b0497150d154bacba039e0876d
 function filterClients() {
     const filter = document.getElementById('searchInput').value.toLowerCase();
     const rows = document.querySelectorAll('#clientsTable tr');
@@ -167,6 +219,10 @@ function filterClients() {
     });
 }
 
+<<<<<<< HEAD
+=======
+// دالة الحفظ
+>>>>>>> df3c73617a03f5b0497150d154bacba039e0876d
 async function saveClient(e) {
     e.preventDefault();
     const id = document.getElementById('editClientId').value;

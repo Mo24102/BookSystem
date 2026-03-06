@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+var API_URL = "https://localhost:7024";
+>>>>>>> df3c73617a03f5b0497150d154bacba039e0876d
 
 var API_URL = "https://localhost:7024";
 
