@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المصروفات | BookSystem</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { 
+            --dark-sidebar: #1e293b; 
+            --dark-bg: #0f172a; 
+            --card-bg: #1e293b;
+            --accent-blue: #3b82f6; 
+            --accent-red: #fb7185;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        body { 
+            background: var(--dark-bg); 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            margin: 0; 
+            color: var(--text-main);
+        }
+
+        /* السايدبار (نفس تصميم الإحصائيات) */
+        .sidebar { 
+            width: 260px; height: 100vh; background: var(--dark-sidebar); 
+            position: fixed; right: 0; top: 0; padding: 20px; z-index: 1000; 
+            display: flex; flex-direction: column; border-left: 1px solid var(--border-color);
+        }
+
+        .sidebar h2 { 
+            color: #fff; font-weight: 800; margin-bottom: 30px; text-align: center; 
+            border-bottom: 1px solid var(--border-color); padding-bottom: 15px; 
+        }
+
+        .nav-link { 
+            color: var(--text-muted); padding: 12px 15px; border-radius: 12px; 
+            margin-bottom: 8px; transition: 0.3s; display: flex; align-items: center; text-decoration: none; 
+        }
+
+        .nav-link i { margin-left: 12px; }
+        .nav-link:hover, .nav-link.active { background: rgba(59, 130, 246, 0.1); color: var(--accent-blue); }
+        .nav-link.active { background: var(--accent-blue); color: white; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); }
+
+        /* المحتوى الرئيسي */
+        .main-content { margin-right: 260px; padding: 40px; }
+
+        /* حاوية الجدول */
+        .data-container {
+            background: var(--card-bg); border-radius: 24px; padding: 30px;
+            border: 1px solid var(--border-color); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* تنسيق الجدول */
+        .table { color: var(--text-main) !important; margin-bottom: 0; }
+        .table thead th { 
+            background: #2d3748 !important; color: var(--accent-red); 
+            border-bottom: 2px solid var(--accent-red); padding: 18px;
+        }
+        .table tbody tr { /* هنا المشكلة الأساسية: بوتستراب يضيف خلفية بيضاء للصفوف */
+            background-color: transparent !important; 
+            color: var(--text-main) !important;
+            border-bottom: 1px solid var(--border-color) !important; }
+        .table tbody tr:hover { background: rgba(255,255,255,0.02) !important; }
+        .table td { background-color: transparent !important; /* ضمان عدم وجود خلفية في الخلايا */
+            color: var(--text-main) !important;
+            padding: 18px; 
+            vertical-align: middle; }
+
+        /* الأزرار */
+        .btn-add-expense {
+            background: var(--accent-red); color: white; border: none;
+            padding: 12px 25px; border-radius: 12px; font-weight: 600; transition: 0.3s;
+        }
+        .btn-add-expense:hover { background: #e11d48; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(251, 113, 133, 0.3); }
+
+        .btn-action { width: 35px; height: 35px; border-radius: 10px; border: 1px solid var(--border-color); background: transparent; transition: 0.3s; }
+        .btn-edit { color: var(--accent-blue); }
+        .btn-edit:hover { background: var(--accent-blue); color: white; }
+        .btn-delete { color: #f87171; }
+        .btn-delete:hover { background: #f87171; color: white; }
+
+        /* المودال الداكن */
+        .modal-content { 
+            background: #1e293b !important; /* خلفية داكنة */
+            border: 1px solid var(--border-color); 
+            border-radius: 24px; 
+            color: white; 
+        }
+        .modal-header { border-bottom: 1px solid var(--border-color); padding: 25px; }
+        .form-control { 
+            background: var(--dark-bg); border: 1px solid var(--border-color); 
+            color:  white !important; border-radius: 12px; padding: 12px;
+        }
+        .form-control:focus { background: var(--dark-bg); border-color: var(--accent-blue); box-shadow: none; }
+        .form-control::placeholder {
+            color: rgba(151, 150, 150, 0.7) !important;
+        }
+        .form-label { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 8px; }
+        /* حل مشكلة خلفية الـ Textarea البيضاء في الصورة */
+        textarea.form-control {
+            background-color: #0f172a !important;
+            color: white !important;
+        }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>BookSystem</h2>
+        <nav class="nav flex-column h-100">
+            <a href="/HTML/dashboard.html" class="nav-link"><i class="fas fa-chart-pie"></i> الإحصائيات</a>
+            <a href="/HTML/Clients/clients.html" class="nav-link"><i class="fas fa-users"></i> إدارة العملاء</a>
+            <a href="#" class="nav-link active"><i class="fas fa-wallet"></i> المصروفات</a>
+            <button class="nav-link logout w-100 bg-transparent text-start mt-auto border-0" style="color: #fb7185;"><i class="fas fa-sign-out-alt"></i> خروج</button>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <header class="mb-5 d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="fw-bold text-white m-0">سجل المصروفات التشغيلية</h2>
+                <p class="text-white-50 m-0">إدارة ومراقبة كافة المصاريف المالية للمؤسسة</p>
+            </div>
+            <button class="btn-add-expense shadow-lg" onclick="prepareAddModal()">
+                <i class="fas fa-plus-circle me-1"></i> إضافة مصروف جديد
+            </button>
+        </header>
+
+        <div class="data-container shadow-lg">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>نوع المصروف</th>
+                            <th>المبلغ</th>
+                            <th>التاريخ</th>
+                            <th>ملاحظات</th>
+                            <th class="text-center">إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expensesTableBody">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="expenseModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <form id="expenseForm">
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-bold" id="modalTitle">تسجيل مصروف جديد</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <input type="hidden" id="editExpenseId">
+                        <div class="mb-3">
+                            <label class="form-label">نوع المصروف</label>
+                            <input type="text" id="eCat" class="form-control" placeholder="مثال: إيجار، رواتب..." required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">المبلغ المستقطع (EGP)</label>
+                            <input type="number" id="eAmount" class="form-control" step="0.01" placeholder="500"  required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">التاريخ والوقت</label>
+                            <input type="datetime-local" id="eDate" class="form-control"  required>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label">ملاحظات إضافية</label>
+                            <textarea id="eNotes" class="form-control" rows="3" placeholder="أضف ملاحظات إضافية..."></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="submit" id="submitBtn" class="btn-add-expense w-100 py-3">حفظ البيانات وتحديث السجل</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/JS/expenses.js"></script>
+</body>
+</html>

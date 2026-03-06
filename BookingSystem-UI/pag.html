@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration · Bootstrap clone</title>
+  <!-- Bootstrap 5 (Botestrub style) + minimal custom tuning -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- (optional) tiny custom background to match soft card style like the png -->
+  <style>
+    body {
+      background: #f2f4f8; /* subtle grey – similar to clean registration card background */
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+    }
+    .registration-card {
+      border: none;
+      border-radius: 1.2rem;
+      box-shadow: 0 0.75rem 2rem rgba(0, 0, 0, 0.08);
+      background: rgba(255,255,255,0.98);
+      backdrop-filter: blur(2px);
+    }
+    .form-control:focus {
+      box-shadow: 0 0 0 0.2rem rgba(13,110,253,0.15);
+      border-color: #86b7fe;
+    }
+    .error-msg {
+      font-size: 0.8rem;
+      margin-top: 0.2rem;
+    }
+    /* subtle transition for interactive feedback */
+    .form-control.is-invalid {
+      background-image: none;
+      border-color: #dc3545;
+    }
+    .btn-reg {
+      padding: 0.6rem 1.2rem;
+      font-weight: 500;
+    }
+    .login-link {
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- main container: perfectly centered, extra small devices friendly -->
+  <div class="container px-4 py-3">
+    <div class="row justify-content-center">
+      <div class="col-12 col-sm-10 col-md-8 col-lg-5 col-xl-4">
+
+        <!-- card – exactly like a minimal registration block from the image -->
+        <div class="card registration-card overflow-hidden">
+          <div class="card-body p-4 p-lg-5">
+
+            <!-- heading: "Registration" as in PNG (first occurrence) -->
+            <h2 class="text-center mb-4 fw-semibold" style="letter-spacing: -0.02em;">Registration</h2>
+
+            <!-- registration form with JS validation, Bootstrap classes -->
+            <form id="registerForm" novalidate>
+              <!-- username field -->
+              <div class="mb-3">
+                <label for="username" class="form-label fw-medium">Username</label>
+                <input type="text" class="form-control form-control-lg" id="username" placeholder="e.g. johndoe" autocomplete="off">
+                <div id="usernameError" class="error-msg text-danger mt-1"></div>
+              </div>
+
+              <!-- email field -->
+              <div class="mb-3">
+                <label for="email" class="form-label fw-medium">Email</label>
+                <input type="email" class="form-control form-control-lg" id="email" placeholder="name@example.com" autocomplete="off">
+                <div id="emailError" class="error-msg text-danger mt-1"></div>
+              </div>
+
+              <!-- password field -->
+              <div class="mb-4">
+                <label for="password" class="form-label fw-medium">Password</label>
+                <input type="password" class="form-control form-control-lg" id="password" placeholder="at least 6 characters">
+                <div id="passwordError" class="error-msg text-danger mt-1"></div>
+              </div>
+
+              <!-- registration button (exactly "Registration" as in PNG) -->
+              <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-lg btn-reg fw-semibold">Registration</button>
+              </div>
+            </form>
+
+            <!-- "Click here Login" link exactly as described in the image -->
+            <div class="text-center mt-4 login-link">
+              <a href="#" class="text-decoration-none" style="color: #0d6efd; font-weight: 500;">Click here Login</a>
+              <span class="text-muted ms-1" style="font-size:0.9rem;">➜ (demo)</span>
+            </div>
+
+            <!-- tiny note to reflect demo registration, harmless -->
+            <p class="text-muted text-center mt-3 mb-0 small">fill & register (frontend simulation)</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS bundle (optional but good for toggles etc) + custom validation script -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- custom JavaScript (vanilla, HTML5 friendly) -->
+  <script>
+    (function() {
+      'use strict';
+
+      // get DOM elements
+      const form = document.getElementById('registerForm');
+      const username = document.getElementById('username');
+      const email = document.getElementById('email');
+      const password = document.getElementById('password');
+      
+      const usernameError = document.getElementById('usernameError');
+      const emailError = document.getElementById('emailError');
+      const passwordError = document.getElementById('passwordError');
+
+      // helper to clear previous error styling & message for a field
+      function clearFieldError(input, errorDiv) {
+        input.classList.remove('is-invalid');
+        errorDiv.innerHTML = '';
+      }
+
+      // real-time clearing: when user starts typing, remove error for that field
+      username.addEventListener('input', function() {
+        clearFieldError(username, usernameError);
+      });
+      email.addEventListener('input', function() {
+        clearFieldError(email, emailError);
+      });
+      password.addEventListener('input', function() {
+        clearFieldError(password, passwordError);
+      });
+
+      // basic email regex (sufficient for demo)
+      function isValidEmail(emailStr) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailStr);
+      }
+
+      // main validation on submit
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();  // always prevent actual submit (demo)
+
+        let isFormValid = true;
+
+        // --- validate username (non-empty) ---
+        const usernameVal = username.value.trim();
+        if (!usernameVal) {
+          username.classList.add('is-invalid');
+          usernameError.innerHTML = 'Username is required.';
+          isFormValid = false;
+        } else {
+          clearFieldError(username, usernameError);
+        }
+
+        // --- validate email (non-empty + valid format) ---
+        const emailVal = email.value.trim();
+        if (!emailVal) {
+          email.classList.add('is-invalid');
+          emailError.innerHTML = 'Email address is required.';
+          isFormValid = false;
+        } else if (!isValidEmail(emailVal)) {
+          email.classList.add('is-invalid');
+          emailError.innerHTML = 'Please enter a valid email (e.g., name@domain.com).';
+          isFormValid = false;
+        } else {
+          clearFieldError(email, emailError);
+        }
+
+        // --- validate password (min 6 chars) ---
+        const passwordVal = password.value.trim();  // we don't want spaces-only passwords
+        if (!passwordVal) {
+          password.classList.add('is-invalid');
+          passwordError.innerHTML = 'Password cannot be empty.';
+          isFormValid = false;
+        } else if (passwordVal.length < 6) {
+          password.classList.add('is-invalid');
+          passwordError.innerHTML = 'Password must be at least 6 characters.';
+          isFormValid = false;
+        } else {
+          clearFieldError(password, passwordError);
+        }
+
+        // if everything is valid → show a friendly success message (simulate registration)
+        if (isFormValid) {
+          // you could also style a green check, but we'll use a simple alert for demo (matches image purpose)
+          alert('✅ Registration demo successful! (no data sent)');
+          
+          // OPTIONAL: clear form fields (just for UX)
+          // username.value = '';
+          // email.value = '';
+          // password.value = '';
+          // but image doesn't specify auto-clear, so we keep fields as is.
+          // However we do remove all error styles (already clean)
+          
+          // you could also reset the form (but keep placeholders)
+          // form.reset();  // uncomment if you prefer clearing
+        }
+      });
+
+      // extra: simulate a "click here login" action (just show message to match demo)
+      const loginLink = document.querySelector('a[href="#"]');
+      if (loginLink) {
+        loginLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          alert('🔐 Login page – demo navigation (would redirect)');
+        });
+      }
+
+    })();
+  </script>
+
+  <!-- very subtle design touch: consistent with "Botestrub" (Bootstrap) simple and clean -->
+</body>
+</html>
